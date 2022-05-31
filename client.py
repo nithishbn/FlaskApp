@@ -1,4 +1,5 @@
 from __future__ import print_function
+import base64
 import requests
 import json
 import cv2
@@ -17,9 +18,12 @@ img = cv2.imread('testinput.jpg')
 # img = cv2.imread('photo_2022-05-06_19-58-00.jpg')
 # encode image as jpeg
 _, img_encoded = cv2.imencode('.png', img)
+# image_read = image.read()
+image_64_encode = base64.b64encode(img)
+print(image_64_encode[:50])
 # print(img_encoded.tostring())
 # send http request with image and receive response
-response = requests.post(test_url, data=img_encoded.tostring(), headers=headers)
+response = requests.post(test_url, data=image_64_encode, headers=headers)
 # decode response
 # print(json.loads(response.text))
 frame = jsonpickle.decode(response.text) 
