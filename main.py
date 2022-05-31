@@ -61,7 +61,7 @@ def overlayAfterEdgeDetection():
             annotator.box_label(xyxy, label, color=colors(1,True))
     im0 = annotator.result()
     # Image.fromarray(cv2.cvtColor(im0, cv2.COLOR_BGR2RGBA)).save("det-input-final.jpg", quality=95, subsampling=0)
-    Image.fromarray(im0).save("det-input-final.png", quality=95, subsampling=0)
+    Image.fromarray(im0).save("det-input-final.jpg", quality=95, subsampling=0)
     # cv2.imwrite("det-input-final.jpg", im0)
 # streamMicroscope()
 # cv_detect()
