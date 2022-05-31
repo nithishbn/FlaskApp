@@ -16,31 +16,31 @@ from urllib.parse import unquote
 app = Flask(__name__)
 
 # route http posts to this method
+
 @app.route('/api/test', methods=['POST'])
 def test():
     r = request
-    
-    parse = r.data
-    # print(parse[:50])
-    strOne = parse.partition(b'=')[2]
-    strOne = unquote(strOne.decode("utf8")).encode("utf8")
-    img = Image.open(io.BytesIO(codecs.decode(strOne.strip(),'base64')))
-    img.save("testinput.jpg")
-
+    # convert string of image data to uint8
+    nparr = np.fromstring(r.data, np.uint8)
+    # decode image
+    img = cv2.imdecode(nparr, cv2.IMREAD_COLOR)
+    cv2.imwrite("testinput.jpg", img)
+    # if os.path.exists("det-input.jpg"):
+    #     os.remove("det-input.jpg")
+    # if os.path.exists("testinput.txt"):
+    #     os.remove("testinput.txt")
     # one click
     mn.runDetection()
     # mn.crop_source_img("testinput.jpg", "testinput.txt")
-    mn.hair_canny("testinput.jpg","testinput.txt",25)
+    # mn.hair_canny("testinput.jpg","testinput.txt",25)
     mn.overlayAfterEdgeDetection()
     # send back to client
     imgRet = cv2.imread("det-input-final.jpg")
+    # do some fancy processing here....
     # frame = analyze_and_modify_frame( frame )  
-    _, frame  = imencode('.jpg', imgRet)
-    
-    urlSafeEncodedBytes = base64.b64encode(frame)
-    urlSafeEncodedStr = str(urlSafeEncodedBytes, "utf8")
-    # print(urlSafeEncodedStr[:50])
-    return Response(response=urlSafeEncodedStr, status=200, mimetype="application/json") 
+    _, frame  = imencode('.png', imgRet)
+    response_pickled  = jsonpickle.encode( frame )
+    return Response(response=response_pickled, status=200, mimetype="application/json") 
 @app.after_request
 def add_header(response):
     response.cache_control.max_age = 1

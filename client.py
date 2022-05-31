@@ -3,15 +3,17 @@ import requests
 import json
 import cv2
 import jsonpickle
-addr = 'http://76.176.146.198:1234'
-# addr = "http://192.168.1.59:1234/"
+
+from main import streamMicroscope
+addr = 'http://76.176.144.205:1234'
+# addr = "http://localhost:1234/"
 test_url = addr + '/api/test'
 
 # prepare headers for http request
 content_type = 'image/jpeg'
 headers = {'content-type': content_type}
-
-img = cv2.imread('test1.jpg')
+streamMicroscope()
+img = cv2.imread('testinput.jpg')
 # img = cv2.imread('photo_2022-05-06_19-58-00.jpg')
 # encode image as jpeg
 _, img_encoded = cv2.imencode('.png', img)

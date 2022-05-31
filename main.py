@@ -19,7 +19,7 @@ import cv2
 import numpy as np
 
 def streamMicroscope():
-    vid = cv2.VideoCapture(1)
+    vid = cv2.VideoCapture(0)
     while(True):
         # Capture the video frame 
         # by frame
